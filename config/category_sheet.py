@@ -1,6 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials
-
+import uuid
 # เพิ่ม scope สำหรับ Sheets และ Drive
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
@@ -16,18 +16,17 @@ client = gspread.authorize(creds)
 
 # ใช้ ID แทนชื่อ
 SPREADSHEET_ID = "1t0ykHrH8CS2Cn9GLL1LUUj9N7JWsW7NogQjdscDOqos"
-sheet = client.open_by_key(SPREADSHEET_ID).sheet1
+sheet = client.open_by_key(SPREADSHEET_ID).get_worksheet(2)
 
 # ----- CRUD Functions -----
-
-# CREATE
-def add_row(data: list):
-    sheet.append_row(data)
-
 # READ
 def get_all_data():
     return sheet.get_all_records()
 
+# CREATE
+def add_row(data: list):
+    sheet.append_row(data)
+    
 # UPDATE
 def update_row(row_number: int, data: list):
     """
@@ -44,4 +43,3 @@ def delete_row(row_number: int):
     ลบบรรทัดที่ row_number (เริ่มจาก 2 แทน 1)
     """
     sheet.delete_rows(row_number + 1)
-
