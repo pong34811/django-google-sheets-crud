@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.utils.timezone import now
 import uuid
 
-from config import account_sheet  # สมมุติว่าเชื่อมต่อ sheet สำเร็จแล้ว
+from config import account_sheet ,category_sheet    # สมมุติว่าเชื่อมต่อ sheet สำเร็จแล้ว
 # สมมุติว่าใช้ header แบบนี้:
 # ['datetime', 'details', 'amount', 'type', 'category', 'created_by', 'created', 'updated_by', 'updated']
 
@@ -16,6 +16,7 @@ def account_list_view(request):
     if not username:
         return redirect('/auth/login/')
 
+    # ดึงข้อมูลบัญชีรายรับ-รายจ่าย
     raw_data = account_sheet.get_all_data()
 
     data = [
@@ -34,33 +35,39 @@ def account_list_view(request):
         for index, row in enumerate(raw_data)
     ]
 
+    # ดึงหมวดหมู่จาก category_sheet
+    try:
+        category_data = category_sheet.get_all_data()
+        categories = [row.get('name') for row in category_data if row.get('name')]
+    except Exception as e:
+        categories = []
+        print(f"Error fetching categories: {e}")
+
+    # จัดการหน้า
     page = request.GET.get('page', 1)
     per_page = int(request.GET.get('per_page', 10))
     paginator = Paginator(data, per_page)
     accounts = paginator.get_page(page)
 
+    # สำหรับ modal แก้ไข
     edit_row = request.GET.get('edit_row')
-
     edit_data = None
     if edit_row:
         try:
-            # แปลง edit_row ที่ส่งมา (เลขแถวจริงในชีต) เป็น index ของ list raw_data
-            row_index = int(edit_row) - 2  # เพราะ header อยู่แถว 1, data เริ่มแถว 2
+            row_index = int(edit_row) - 2
             if 0 <= row_index < len(raw_data):
                 edit_data = raw_data[row_index]
         except (ValueError, IndexError):
-            edit_data = None  # ถ้าเลขแถวผิดพลาด ไม่ต้องแสดง modal หรือ ข้อมูล
+            edit_data = None
 
     return render(request, 'account_list.html', {
         'accounts': accounts,
         'username': username,
         'per_page': per_page,
         'edit_row': edit_row,
-        'edit_data': edit_data,  # ส่งข้อมูลแถวที่จะแก้ไขไปด้วย
-        'categories': list(set(row.get('category') for row in raw_data if row.get('category'))),
+        'edit_data': edit_data,
+        'categories': categories,
     })
-
-
 
 
 @csrf_exempt
@@ -74,7 +81,10 @@ def account_create_view(request):
         category = request.POST.get('category')
 
         created_at = now().strftime('%Y-%m-%d %H:%M:%S')
+        id = str(uuid.uuid4())  # ✅ สร้าง UUID
+
         new_row = [
+            id,     # ✅ ใส่ ID ที่ตำแหน่งแรก
             datetime_val,
             details,
             amount,

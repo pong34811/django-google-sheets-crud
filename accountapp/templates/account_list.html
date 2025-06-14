@@ -160,25 +160,25 @@
           <!-- Pagination Navigation -->
           <nav aria-label="Page navigation" class="mt-3">
             <ul class="pagination justify-content-center mb-0">
-              {% if categories.has_previous %}
+              {% if account.has_previous %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ categories.previous_page_number }}&per_page={{ per_page }}">ก่อนหน้า</a>
+                <a class="page-link" href="?page={{ accounts.previous_page_number }}&per_page={{ per_page }}">ก่อนหน้า</a>
               </li>
               {% else %}
               <li class="page-item disabled"><span class="page-link">ก่อนหน้า</span></li>
               {% endif %}
 
-              {% for num in categories.paginator.page_range %}
-                {% if num == categories.number %}
+              {% for num in account.paginator.page_range %}
+                {% if num == account.number %}
                   <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
-                {% elif num >= categories.number|add:"-2" and num <= categories.number|add:"2" %}
+                {% elif num >= account.number|add:"-2" and num <= account.number|add:"2" %}
                   <li class="page-item"><a class="page-link" href="?page={{ num }}&per_page={{ per_page }}">{{ num }}</a></li>
                 {% endif %}
               {% endfor %}
 
-              {% if categories.has_next %}
+              {% if account.has_next %}
               <li class="page-item">
-                <a class="page-link" href="?page={{ categories.next_page_number }}&per_page={{ per_page }}">ถัดไป</a>
+                <a class="page-link" href="?page={{ account.next_page_number }}&per_page={{ per_page }}">ถัดไป</a>
               </li>
               {% else %}
               <li class="page-item disabled"><span class="page-link">ถัดไป</span></li>
