@@ -1,0 +1,70 @@
+<!-- modal/edit.html -->
+<div class="modal fade {% if edit_row %}show{% endif %}"
+     id="editCategoryModal"
+     tabindex="-1"
+     aria-labelledby="editCategoryModalLabel"
+     aria-hidden="true"
+     {% if edit_row %}style="display: block;"{% endif %}>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow-lg rounded-4">
+      <form action="/account/update/{{ edit_row }}/" method="post">
+        {% csrf_token %}
+
+        <div class="modal-header bg-primary text-white rounded-top-4">
+          <h5 class="modal-title fw-bold" id="editCategoryModalLabel">
+            <i class="bi bi-pencil-square me-2"></i> แก้ไขรายการบัญชี
+          </h5>
+          <a href="/account/" class="btn-close btn-close-white"></a>
+        </div>
+
+        <div class="modal-body px-4 py-3">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="datetimeInput" class="form-label">วันที่และเวลา</label>
+              <input type="datetime-local" class="form-control" id="datetimeInput" name="datetime"
+                     value="{{ edit_data.datetime|default:'' }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="amountInput" class="form-label">จำนวนเงิน</label>
+              <input type="number" class="form-control" id="amountInput" name="amount"
+                     value="{{ edit_data.amount|default:'' }}" required>
+            </div>
+
+            <div class="col-12">
+              <label for="detailsInput" class="form-label">รายละเอียด</label>
+              <input type="text" class="form-control" id="detailsInput" name="details"
+                     value="{{ edit_data.details|default:'' }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label for="typeSelect" class="form-label">ประเภท</label>
+              <select class="form-select" id="typeSelect" name="type" required>
+                <option value="รายรับ" {% if edit_data.type == "รายรับ" %}selected{% endif %}>รายรับ</option>
+                <option value="รายจ่าย" {% if edit_data.type == "รายจ่าย" %}selected{% endif %}>รายจ่าย</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="categorySelect" class="form-label">หมวดหมู่</label>
+              <select class="form-select" id="categorySelect" name="category" required>
+                {% for cat in categories %}
+                  <option value="{{ cat }}" {% if edit_data.category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer bg-light rounded-bottom-4">
+          <a href="/account/" class="btn btn-secondary">
+            <i class="bi bi-x-circle me-1"></i> ยกเลิก
+          </a>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle-fill me-1"></i> บันทึกการแก้ไข
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

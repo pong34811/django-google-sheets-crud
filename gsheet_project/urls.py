@@ -6,4 +6,5 @@ urlpatterns = [
     path("sheet/", include("sheetapp.urls")),
     path("category/", include("categoryapp.urls")),
     path("auth/", include("authapp.urls")),
+    path("account/", include("accountapp.urls")),
 ]

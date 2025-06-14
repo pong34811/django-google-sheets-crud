@@ -72,8 +72,9 @@ def category_create_view(request):
         for row in existing_categories:
             if row.get('name', '').strip().lower() == name.lower():
                 return JsonResponse({'error': 'Category with this name already exists'}, status=400)
+        created_by = now().strftime('%Y-%m-%d %H:%M:%S')
         user_id = str(uuid.uuid4())
-        new_row = [user_id, name, True, None, request.session.get('username'), None, None]
+        new_row = [user_id, name, True, created_by, request.session.get('username'), None, None]
         category_sheet.add_row(new_row)
         
         messages.success(request, 'เพิ่มข้อมูลสำเร็จแล้ว ✅')
@@ -87,16 +88,17 @@ def category_update_view(request, row_number):
     if request.method == "POST":
         new_name = request.POST.get('name')
         username = request.session.get('username')
+        
         all_rows = category_sheet.get_all_data()
-
-
         row = all_rows[row_number]
-        header = ['id', 'name', 'is_active', 'created_by', 'created', 'updated_by', 'updated']
+        
         row['name'] = new_name
         row['updated_by'] = username
         row['updated'] = now().strftime('%Y-%m-%d %H:%M:%S')
-
+        
+        header = ['id', 'name', 'is_active', 'created_by', 'created', 'updated_by', 'updated']
         row_list = [row.get(col, '') for col in header]
+        
         category_sheet.update_row(row_number, row_list)
 
         messages.success(request, 'แก้ไขหมวดหมู่เรียบร้อยแล้ว')

@@ -1,0 +1,37 @@
+{% for account in accounts %}
+<!-- Modal ลบข้อมูล -->
+<div class="modal fade" id="deleteModal{{ account.row_number }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ account.row_number }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg rounded-4">
+      <form action="/account/delete/{{ account.row_number }}/" method="post">
+        {% csrf_token %}
+        <div class="modal-header bg-danger text-white rounded-top-4">
+          <h5 class="modal-title fw-bold" id="deleteModalLabel{{ account.row_number }}">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> ยืนยันการลบข้อมูล
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body px-4 py-3">
+          <p class="mb-2">คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลรายการนี้?</p>
+          <ul class="list-unstyled">
+            <li><strong>รายละเอียด:</strong> {{ account.details }}</li>
+            <li><strong>วันที่:</strong> {{ account.datetime }}</li>
+            <li><strong>จำนวนเงิน:</strong> {{ account.amount }} บาท</li>
+          </ul>
+          <div class="alert alert-warning mt-3 rounded-3 mb-0" role="alert">
+            การลบจะไม่สามารถเรียกคืนข้อมูลได้
+          </div>
+        </div>
+        <div class="modal-footer bg-light rounded-bottom-4">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <i class="bi bi-x-circle me-1"></i> ยกเลิก
+          </button>
+          <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash-fill me-1"></i> ลบเลย
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}

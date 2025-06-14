@@ -1,0 +1,61 @@
+<!-- Modal เพิ่มหมวดหมู่ -->
+<div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/account/add/" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="addAccountModalLabel">เพิ่มหมวดหมู่</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- รายละเอียด -->
+          <div class="mb-3">
+            <label for="detailsInput" class="form-label">รายละเอียด</label>
+            <input type="text" name="details" class="form-control" id="detailsInput" placeholder="กรุณากรอกรายละเอียด" required>
+          </div>
+          <!-- วันที่/เวลา -->
+          <div class="mb-3">
+            <label for="datetimeInput" class="form-label">วันที่/เวลา</label>
+            <input type="datetime-local" name="datetime" class="form-control" id="datetimeInput" required>
+          </div>
+
+          <!-- จำนวน -->
+          <div class="mb-3">
+            <label for="amountInput" class="form-label">จำนวน</label>
+            <input type="number" name="amount" class="form-control" id="amountInput" min="0" step="0.01" required>
+          </div>
+
+          <!-- ประเภท -->
+          <div class="mb-3">
+            <label for="typeSelect" class="form-label">ประเภท</label>
+            <select name="type" class="form-select" id="typeSelect" required>
+              <option value="" disabled selected>-- เลือกประเภท --</option>
+              <option value="รายรับ">รายรับ</option>
+              <option value="รายจ่าย">รายจ่าย</option>
+            </select>
+          </div>
+
+<!-- หมวดหมู่ (select) -->
+<div class="mb-3">
+  <label for="categorySelect" class="form-label">ชื่อหมวดหมู่</label>
+  <select name="category" id="categorySelect" class="form-select" required>
+    <option value="" disabled selected>-- เลือกหมวดหมู่ --</option>
+    {% for cat in categories %}
+      <option value="{{ cat }}">{{ cat }}</option>
+    {% endfor %}
+  </select>
+</div>
+
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="submit" class="btn btn-success">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

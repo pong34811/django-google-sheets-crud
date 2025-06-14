@@ -1,28 +1,26 @@
 import gspread
 from google.oauth2.service_account import Credentials
-import uuid
-# เพิ่ม scope สำหรับ Sheets และ Drive
+
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive"
 ]
 
-# โหลด credentials
 creds = Credentials.from_service_account_file(
     "credentials/credentials.json", scopes=SCOPES
 )
 
 client = gspread.authorize(creds)
 
-# ใช้ ID แทนชื่อ
 SPREADSHEET_ID = "1t0ykHrH8CS2Cn9GLL1LUUj9N7JWsW7NogQjdscDOqos"
+
 sheet = client.open_by_key(SPREADSHEET_ID).sheet1
 
-# ----- CRUD Functions -----
-# READ
+# ฟังก์ชันดึงข้อมูลทั้งหมด
 def get_all_data():
     return sheet.get_all_records()
 
+# ฟังก์ชันเช็ค username ว่ามีหรือไม่
 def is_username_exists(username):
     data = get_all_data()
     for row in data:
@@ -30,10 +28,12 @@ def is_username_exists(username):
             return True
     return False
 
-def register_user(username, password):
-    user_id = str(uuid.uuid4())
-    sheet.append_row([user_id, username, password])
+# ฟังก์ชันสมัครสมาชิก (เพิ่มแถวใหม่)
+def register_user(id, username, password, is_active, created_by, created):
+    row = [id, username, password, is_active, created_by, created]
+    sheet.append_row(row)
 
+# ฟังก์ชันหาผู้ใช้ด้วย username และ password
 def find_user_by_credentials(username, password):
     data = get_all_data()
     for row in data:
@@ -42,3 +42,16 @@ def find_user_by_credentials(username, password):
         if row_username == username.strip() and row_password == password.strip():
             return row
     return None
+
+def update_last_join(username, last_join):
+    # ดึงข้อมูลทั้งหมด
+    all_records = sheet.get_all_records()
+
+    # หาแถวที่ username ตรงกัน
+    for idx, row in enumerate(all_records, start=2):  # เริ่มนับแถวที่ 2 เพราะแถว 1 header
+        if row.get("username") == username:
+            # สมมติว่าคอลัมน์ last_join เป็นคอลัมน์ที่ 7 (G)
+            # ปรับเลขคอลัมน์ให้ตรงกับ Sheet จริงของคุณ
+            col_index = 7
+            sheet.update_cell(idx, col_index, last_join)
+            break

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'sheetapp',  # เพิ่มแอป sheetapp ที่เราสร้างขึ้น
     'categoryapp',  # เพิ่มแอป categoryapp ที่เราสร้างขึ้น
     'authapp',  # เพิ่มแอป authapp ที่เราสร้างขึ้น
+    'accountapp',  # เพิ่มแอป accountapp ที่เราสร้างขึ้น
 ]
 
 MIDDLEWARE = [
