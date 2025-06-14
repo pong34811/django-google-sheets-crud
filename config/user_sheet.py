@@ -9,7 +9,7 @@ SCOPES = [
 
 # โหลด credentials
 creds = Credentials.from_service_account_file(
-    "credentials.json", scopes=SCOPES
+    "credentials/credentials.json", scopes=SCOPES
 )
 
 client = gspread.authorize(creds)

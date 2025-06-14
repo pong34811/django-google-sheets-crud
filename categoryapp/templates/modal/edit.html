@@ -1,0 +1,29 @@
+<!-- modal/edit.html -->
+<div class="modal fade {% if edit_row %}show{% endif %}"
+     id="editCategoryModal"
+     tabindex="-1"
+     aria-labelledby="editCategoryModalLabel"
+     aria-hidden="true"
+     {% if edit_row %}style="display: block;"{% endif %}>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" action="/category/update/{{ edit_row }}/">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCategoryModalLabel">แก้ไขหมวดหมู่</h5>
+          <a href="/category/" class="btn-close" aria-label="Close"></a>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="editCategoryName" class="form-label">ชื่อหมวดหมู่</label>
+            <input type="text" class="form-control" name="name" id="editCategoryName" value="{{ edit_name }}" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <a href="/category/" class="btn btn-secondary">ยกเลิก</a>
+          <button type="submit" class="btn btn-primary">บันทึก</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

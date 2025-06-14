@@ -43,3 +43,12 @@ def login_view(request):
             return redirect('/auth/login/')
 
     return render(request, 'login.html')
+
+@csrf_exempt
+def logout_view(request):
+    if 'username' in request.session:
+        del request.session['username']
+        messages.success(request, 'ออกจากระบบสำเร็จแล้ว ✅')
+    else:
+        messages.error(request, 'คุณยังไม่ได้เข้าสู่ระบบ ❌')
+    return redirect('/auth/login/')

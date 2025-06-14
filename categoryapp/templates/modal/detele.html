@@ -1,0 +1,23 @@
+{% for category in categories %}
+<!-- Modal ลบข้อมูล -->
+<div class="modal fade" id="deleteModal{{ category.row_number }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ category.row_number }}" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="/category/delete/{{ category.row_number }}/" method="post">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel{{ category.row_number }}">ยืนยันการลบ</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          คุณแน่ใจหรือไม่ว่าต้องการลบหมวดหมู่ "<strong>{{ category.name }}</strong>"?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+          <button type="submit" class="btn btn-danger">ลบเลย</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endfor %}

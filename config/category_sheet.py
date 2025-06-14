@@ -9,7 +9,7 @@ SCOPES = [
 
 # โหลด credentials
 creds = Credentials.from_service_account_file(
-    "credentials.json", scopes=SCOPES
+    "credentials/credentials.json", scopes=SCOPES
 )
 
 client = gspread.authorize(creds)
@@ -33,13 +33,11 @@ def update_row(row_number: int, data: list):
     อัปเดตรายการที่บรรทัด row_number (เริ่มจาก 1) ด้วย data (list)
     แต่ในความเป็นจริงจะอัปเดตแถว row_number + 1 (ข้าม header)
     """
-    actual_row = row_number + 1  # เพิ่ม 1 เพื่อข้าม header แถวแรก
-    cell_range = f"A{actual_row}:{chr(64+len(data))}{actual_row}"
+  
+    cell_range = f"A{row_number}:{chr(64+len(data))}{row_number}"
     sheet.update(cell_range, [data])
 
 # DELETE
 def delete_row(row_number: int):
-    """
-    ลบบรรทัดที่ row_number (เริ่มจาก 2 แทน 1)
-    """
-    sheet.delete_rows(row_number + 1)
+
+    sheet.delete_rows(row_number)
