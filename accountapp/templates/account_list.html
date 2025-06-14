@@ -159,32 +159,33 @@
 
           <!-- Pagination Navigation -->
           <nav aria-label="Page navigation" class="mt-3">
-            <ul class="pagination justify-content-center mb-0">
-              {% if account.has_previous %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ accounts.previous_page_number }}&per_page={{ per_page }}">ก่อนหน้า</a>
-              </li>
-              {% else %}
-              <li class="page-item disabled"><span class="page-link">ก่อนหน้า</span></li>
-              {% endif %}
+  <ul class="pagination justify-content-center mb-0">
+    {% if accounts.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ accounts.previous_page_number }}&per_page={{ per_page }}">ก่อนหน้า</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">ก่อนหน้า</span></li>
+    {% endif %}
 
-              {% for num in account.paginator.page_range %}
-                {% if num == account.number %}
-                  <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
-                {% elif num >= account.number|add:"-2" and num <= account.number|add:"2" %}
-                  <li class="page-item"><a class="page-link" href="?page={{ num }}&per_page={{ per_page }}">{{ num }}</a></li>
-                {% endif %}
-              {% endfor %}
+    {% for num in accounts.paginator.page_range %}
+      {% if num == accounts.number %}
+        <li class="page-item active" aria-current="page"><span class="page-link">{{ num }}</span></li>
+      {% elif num >= accounts.number|add:"-2" and num <= accounts.number|add:"2" %}
+        <li class="page-item"><a class="page-link" href="?page={{ num }}&per_page={{ per_page }}">{{ num }}</a></li>
+      {% endif %}
+    {% endfor %}
 
-              {% if account.has_next %}
-              <li class="page-item">
-                <a class="page-link" href="?page={{ account.next_page_number }}&per_page={{ per_page }}">ถัดไป</a>
-              </li>
-              {% else %}
-              <li class="page-item disabled"><span class="page-link">ถัดไป</span></li>
-              {% endif %}
-            </ul>
-          </nav>
+    {% if accounts.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ accounts.next_page_number }}&per_page={{ per_page }}">ถัดไป</a>
+    </li>
+    {% else %}
+    <li class="page-item disabled"><span class="page-link">ถัดไป</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
         </div>
       </div>
     </div>
